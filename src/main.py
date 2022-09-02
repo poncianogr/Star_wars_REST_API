@@ -29,16 +29,52 @@ def handle_invalid_usage(error):
 @app.route('/')
 def sitemap():
     return generate_sitemap(app)
+    
+@app.route('/users', methods=['GET'])
+def get_users():
+    queryset = User.query.all()
+    #user_list = list(map(lambda user: user.serialize(), user_list))
+    users_list =[user.serialize() for user in queryset]
+    return jsonify(users_list), 200
 
-@app.route('/user', methods=['GET'])
-def handle_hello():
+@app.route('/users/favorites', methods=['GET'])
+def get_users_favorites():
 
-    response_body = {
-        "msg": "Hello, this is your GET /user response "
-    }
+    return jsonify(user_list), 200
 
-    return jsonify(response_body), 200
+@app.route('/people', methods= ['GET'])
+def get_people():
+    return jsonify('people')
 
+
+@app.route('/planet', methods= ['GET'])
+def get_planet():
+    return jsonify('planet')
+
+
+@app.route('/people/<int:people_id>', methods= ['GET'])
+def get_single_people(people_id):
+    return jsonify(people_id)
+
+@app.route('/planet/<int:planet_id>', methods= ['GET'])
+def get_single_planet(planet_id):
+    return jsonify(planet_id)
+
+@app.route('/favorite/planet/<int:planet_id>', methods= ['POST'])
+def post_favorite_planet(planet_id):
+    return jsonify(planet_id)
+
+@app.route('/favorite/people/<int:people_id>', methods= ['POST'])
+def post_favorite_people(people_id):
+    return jsonify(people_id)
+
+@app.route('/favorite/planet/<int:planet_id>', methods= ['DELETE'])
+def delete_favorite_planet(planet_id):
+    return jsonify(planet_id)
+
+@app.route('/favorite/people/<int:people_id>', methods= ['DELETE'])
+def delete_favorite_people(people_id):
+    return jsonify(people_id)
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':
     PORT = int(os.environ.get('PORT', 3000))
